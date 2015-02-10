@@ -28,10 +28,18 @@ function imgSrcSwitch(){
 		if( clickedCount > imgMaxCount ){
 			clickedCount = 1;
 		}
-		$a.removeAttr('style');
+
 		$img = $a.find( 'img' );
+
+		$a.removeAttr('style');
+		$img.show();
+
 		$img.attr( 'src', 'images/' + clickedCount + '.png' );
-		imgToCss();
+
+		setTimeout( function(){
+			imgToCss();
+		}, 100 );
+
 
 		return false;
 	});
