@@ -1,35 +1,38 @@
 $(window).load(function(){
-		imgToCss()
-		imgSrcSwitch()
+	console.log( imgMaxCount );
+	imgToCss()
+	imgSrcSwitch()
 });
 
 function imgToCss(){
-		var imgSrc = $("img").attr("src");
-		var imgSrcHeight = $("img").height();
-		$('a').css({
-		    'background-image':'url('+imgSrc+')',
-		    'height':imgSrcHeight+'px',
-		});
-		$('img').hide();
+	var $img 			= $("img");
+	var imgSrc 			= $img.attr("src");
+	var imgSrcHeight 	= $img.height();
+
+	$('a').css({
+	    'background-image': 'url(' + imgSrc + ')',
+	    'height': imgSrcHeight + 'px',
+		"width": $(window).width()
+	});
+
+	$img.hide();
 }
 
 function imgSrcSwitch(){
-	$('a').click(function(){
-		$(this).removeAttr('style');
-		var thisNum = Number($(this).children('img').attr('src').split(".png")[0].split("images/")[1]),
-				nextNum = thisNum+1,
-				switchNum = $(this).children('img').attr('src',$(this).children('img').attr('src').replace(thisNum,nextNum));
-		$('img').load(function(){imgToCss()});
-		imgError(switchNum,thisNum)
+	var clickedCount 	= 1;
+	var $a 				= $('a');
+
+	$a.on( 'click', function( event ) {
+		clickedCount++;
+
+		if( clickedCount > imgMaxCount ){
+			clickedCount = 1;
+		}
+		$a.removeAttr('style');
+		$img = $a.find( 'img' );
+		$img.attr( 'src', 'images/' + clickedCount + '.png' );
+		imgToCss();
+
 		return false;
 	});
 }
-
-function imgError(nextNum,thisNum){
-  nextNum.error(function() {
-		$(this).parent("a").removeAttr('style');
-		$(this).attr('src', $(this).attr("src").replace(thisNum,"1"));
-		$('img').load(function(){imgToCss()});
-  });
-}
-
